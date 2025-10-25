@@ -92,8 +92,67 @@ public class DatabaseInitializer implements CommandLineRunner {
         safeParse(runId, "open_data/thien_tai/thiet_hai_do_thien_tai.csv",
                 observationInitService::parseDisasterDamage);
 
-        log.info("Observations initialization finished for run ID: {}", runId);
+        safeParse(runId, "open_data/nong_nghiep/dien_tich_hien_co_cay_lau_nam.csv",
+                observationInitService::parsePerennialCropsArea);
 
+        safeParse(runId, "open_data/nong_nghiep/san_pham_va_san_luong_cay_lau_nam.csv",
+                observationInitService::parsePerennialCropsYield);
+
+        String[] headersH2022 = {
+                "Tên", "Phân loại", "Đơn vị tính",
+                "Thực hiện năm 2021", "Ước tính năm 2022", "Năm 2022 so với năm 2021 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_hang_nam_nam_2022.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersH2022, "Tên", "Phân loại", "Đơn vị tính",
+                        "Thực hiện năm 2021", "Ước tính năm 2022"));
+
+        String[] headersH2023 = {
+                "Tên", "Phân loại", "Đơn vị tính",
+                "Thực hiện năm 2022", "Ước tính năm 2023", "Năm 2023 so với năm 2022 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_hang_nam_nam_2023.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersH2023, "Tên", "Phân loại", "Đơn vị tính",
+                        "Thực hiện năm 2022", "Ước tính năm 2023"));
+
+        String[] headersH2024 = {
+                "Phân loại", "Tên", "Đơn vị tính",
+                "Thực hiện năm 2023", "Ước tính năm 2024", "Năm 2024 so với năm 2023 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_hang_nam_nam_2024.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersH2024, "Phân loại", "Tên", "Đơn vị tính",
+                        "Thực hiện năm 2023", "Ước tính năm 2024"));
+
+        String[] headersL2022 = {
+                "Tên", "Phân loại", "Đơn vị tính",
+                "Thực hiện năm 2021", "Ước tính năm 2022", "Năm 2022 so với năm 2021 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_lau_nam_chu_yeu_2022.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersL2022, "Tên", "Phân loại", "Đơn vị tính",
+                        "Thực hiện năm 2021", "Ước tính năm 2022"));
+
+        String[] headersL2023 = {
+                "Tên", "Phân loại", "Đơn vị tính",
+                "Thực hiện năm 2022", "Ước tính năm 2023", "Năm 2023 so với năm 2022 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_lau_nam_chu_yeu_2023.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersL2023, "Tên", "Phân loại", "Đơn vị tính",
+                        "Thực hiện năm 2022", "Ước tính năm 2023"));
+
+        String[] headersL2024 = {
+                "Phân loại", "Tên", "Đơn vị tính",
+                "Thực hiện năm 2023", "Ước tính năm 2024", "Năm 2024 so với năm 2023 (%)"
+        };
+        safeParse(runId, "open_data/nong_nghiep/san_xuat_cay_lau_nam_chu_yeu_2024.csv",
+                is -> observationInitService.parseAnnualProductionFile(
+                        is, headersL2024, "Phân loại", "Tên", "Đơn vị tính",
+                        "Thực hiện năm 2023", "Ước tính năm 2024"));
+
+        log.info("Observations initialization finished for run ID: {}", runId);
     }
 
     @FunctionalInterface

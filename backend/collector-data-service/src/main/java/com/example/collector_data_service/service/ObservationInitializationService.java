@@ -279,4 +279,239 @@ public class ObservationInitializationService {
         log.info("Successfully parsed Disaster Damage. Processed rows: {}, Inserted observations: {}", recordsProcessed, recordsInserted);
         return new ParseResult(recordsProcessed, recordsInserted);
     }
+
+    // Dien tich hien co cay lau nam
+    @Transactional
+    public ParseResult parsePerennialCropsArea(InputStream is) throws Exception {
+        int recordsProcessed = 0;
+        int recordsInserted = 0;
+        List<Observation> observationsToSave = new ArrayList<>();
+        final String METRIC_CATEGORY = "Nông nghiệp";
+        final String METRIC_PREFIX = "Diện tích hiện có - ";
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            String[] HEADERS = {
+                    "Quận huyện",
+                    "2018 (ĐVT: Ha)",
+                    "2019 (ĐVT: Ha)",
+                    "2020 (ĐVT: Ha)",
+                    "2021 (ĐVT: Ha)",
+                    "Sơ bộ 2022 (ĐVT: Ha)"
+            };
+
+            CSVFormat customFormat = CSVFormat.DEFAULT.builder()
+                    .setDelimiter(';')
+                    .setHeader(HEADERS)
+                    .setSkipHeaderRecord(true)
+                    .setTrim(true)
+                    .build();
+
+            CSVParser csvParser = new CSVParser(reader, customFormat);
+
+            Pattern pattern = Pattern.compile("(\\d{4}).*?\\((.*?)\\)");
+            Asset defaultAsset = getOrCreateDefaultCityAsset();
+
+            for (CSVRecord record : csvParser) {
+                recordsProcessed++;
+                String cropName = record.get(HEADERS[0]);
+                if (cropName == null || cropName.isEmpty()) continue;
+
+                String unit = "Ha";
+                Matcher unitMatcher = pattern.matcher(HEADERS[1]);
+                if (unitMatcher.find()) {
+                    unit = unitMatcher.group(2).trim();
+                }
+
+                Metric metric = getOrCreateMetric(METRIC_PREFIX + cropName, METRIC_CATEGORY, unit);
+
+                for (String header : HEADERS) {
+                    if (header.equals(HEADERS[0])) continue;
+
+                    Matcher yearMatcher = pattern.matcher(header);
+                    if (yearMatcher.find()) {
+                        int year = Integer.parseInt(yearMatcher.group(1));
+                        String valueStr = record.get(header).trim();
+                        if (valueStr.isEmpty()) continue;
+
+                        Observation obs = new Observation();
+                        obs.setAsset(defaultAsset);
+                        obs.setMetric(metric);
+                        obs.setRecordTime(LocalDateTime.of(year, 1, 1, 0, 0));
+                        obs.setValue(parseSafeDouble(valueStr));
+                        observationsToSave.add(obs);
+                        recordsInserted++;
+                    }
+                }
+            }
+            observationRepository.saveAll(observationsToSave);
+        }
+        log.info("Successfully parsed Perennial Crops Area. Processed rows: {}, Inserted observations: {}", recordsProcessed, recordsInserted);
+        return new ParseResult(recordsProcessed, recordsInserted);
+    }
+
+    // San pham va san luong cay lau nam
+    @Transactional
+    public ParseResult parsePerennialCropsYield(InputStream is) throws Exception {
+        int recordsProcessed = 0;
+        int recordsInserted = 0;
+        List<Observation> observationsToSave = new ArrayList<>();
+        final String METRIC_CATEGORY = "Nông nghiệp";
+        final String METRIC_PREFIX = "Sản lượng - ";
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            String[] HEADERS = {
+                    "Quận huyện",
+                    "2018 (ĐVT: Tấn)",
+                    "2019 (ĐVT: Tấn)",
+                    "2020 (ĐVT: Tấn)",
+                    "2021 (ĐVT: Tấn)",
+                    "Sơ bộ 2022 (ĐVT: Tấn)"
+            };
+
+            CSVFormat customFormat = CSVFormat.DEFAULT.builder()
+                    .setDelimiter(';')
+                    .setHeader(HEADERS)
+                    .setSkipHeaderRecord(true)
+                    .setTrim(true)
+                    .build();
+
+            CSVParser csvParser = new CSVParser(reader, customFormat);
+
+            Pattern pattern = Pattern.compile("(\\d{4}).*?\\((.*?)\\)");
+            Asset defaultAsset = getOrCreateDefaultCityAsset();
+
+            for (CSVRecord record : csvParser) {
+                recordsProcessed++;
+                String cropName = record.get(HEADERS[0]);
+                if (cropName == null || cropName.isEmpty()) continue;
+
+                String unit = "Tấn";
+                Matcher unitMatcher = pattern.matcher(HEADERS[1]);
+                if (unitMatcher.find()) {
+                    unit = unitMatcher.group(2).trim();
+                }
+
+                Metric metric = getOrCreateMetric(METRIC_PREFIX + cropName, METRIC_CATEGORY, unit);
+
+                for (String header : HEADERS) {
+                    if (header.equals(HEADERS[0])) continue;
+
+                    Matcher yearMatcher = pattern.matcher(header);
+                    if (yearMatcher.find()) {
+                        int year = Integer.parseInt(yearMatcher.group(1));
+                        String valueStr = record.get(header).trim();
+                        if (valueStr.isEmpty()) continue;
+
+                        Observation obs = new Observation();
+                        obs.setAsset(defaultAsset);
+                        obs.setMetric(metric);
+                        obs.setRecordTime(LocalDateTime.of(year, 1, 1, 0, 0));
+                        obs.setValue(parseSafeDouble(valueStr));
+                        observationsToSave.add(obs);
+                        recordsInserted++;
+                    }
+                }
+            }
+            observationRepository.saveAll(observationsToSave);
+        }
+        log.info("Successfully parsed Perennial Crops Yield. Processed rows: {}, Inserted observations: {}", recordsProcessed, recordsInserted);
+        return new ParseResult(recordsProcessed, recordsInserted);
+    }
+
+
+    private final Pattern yearPattern = Pattern.compile("(\\d{4})");
+
+    @Transactional
+    public ParseResult parseAnnualProductionFile(InputStream is,
+                                                 String[] HEADERS,
+                                                 String cropNameCol,
+                                                 String metricNameCol,
+                                                 String unitCol,
+                                                 String year1Col,
+                                                 String year2Col) throws Exception {
+        int recordsProcessed = 0;
+        int recordsInserted = 0;
+        List<Observation> observationsToSave = new ArrayList<>();
+        final String METRIC_CATEGORY = "Nông nghiệp";
+
+        int year1 = 0;
+        int year2 = 0;
+
+        Matcher m1 = yearPattern.matcher(year1Col);
+        if (m1.find()) year1 = Integer.parseInt(m1.group(1));
+
+        Matcher m2 = yearPattern.matcher(year2Col);
+        if (m2.find()) year2 = Integer.parseInt(m2.group(1));
+
+        if (year1 == 0 || year2 == 0) {
+            throw new IllegalArgumentException("Không thể trích xuất năm từ tên cột: " + year1Col + ", " + year2Col);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+
+            CSVFormat customFormat = CSVFormat.DEFAULT.builder()
+                    .setDelimiter(';')
+                    .setHeader(HEADERS)
+                    .setSkipHeaderRecord(true)
+                    .setTrim(true)
+                    .build();
+
+            CSVParser csvParser = new CSVParser(reader, customFormat);
+            Asset defaultAsset = getOrCreateDefaultCityAsset();
+
+            for (CSVRecord record : csvParser) {
+                recordsProcessed++;
+                String cropName = record.get(cropNameCol);
+                String metricType = record.get(metricNameCol);
+                String unit = record.get(unitCol);
+
+                if (cropName.isEmpty() && metricType.isEmpty()) continue;
+
+                String metricName = cropName.equals(metricType) ? cropName : cropName + " - " + metricType;
+
+                Metric metric = getOrCreateMetric(metricName, METRIC_CATEGORY, unit);
+
+                String valueStr1 = record.get(year1Col).trim();
+                if (!valueStr1.isEmpty()) {
+                    Observation obs1 = new Observation();
+                    obs1.setAsset(defaultAsset);
+                    obs1.setMetric(metric);
+                    obs1.setRecordTime(LocalDateTime.of(year1, 1, 1, 0, 0)); // Dữ liệu theo năm
+                    obs1.setValue(parseSafeDouble(valueStr1));
+                    observationsToSave.add(obs1);
+                    recordsInserted++;
+                }
+
+                String valueStr2 = record.get(year2Col).trim();
+                if (!valueStr2.isEmpty()) {
+                    Observation obs2 = new Observation();
+                    obs2.setAsset(defaultAsset);
+                    obs2.setMetric(metric);
+                    obs2.setRecordTime(LocalDateTime.of(year2, 1, 1, 0, 0));
+                    obs2.setValue(parseSafeDouble(valueStr2));
+                    observationsToSave.add(obs2);
+                    recordsInserted++;
+                }
+            }
+            observationRepository.saveAll(observationsToSave);
+        }
+        log.info("Successfully parsed Annual Production file. Processed rows: {}, Inserted observations: {}", recordsProcessed, recordsInserted);
+        return new ParseResult(recordsProcessed, recordsInserted);
+    }
+
+    private Double parseSafeDouble(String valueStr) {
+        if (valueStr == null || valueStr.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            String sanitizedString = valueStr.replace(",", "");
+
+            return Double.parseDouble(sanitizedString);
+        } catch (NumberFormatException e) {
+            log.warn("Could not parse double value: '{}'", valueStr);
+            return null;
+        }
+    }
 }
