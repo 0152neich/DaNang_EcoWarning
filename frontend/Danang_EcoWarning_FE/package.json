@@ -10,8 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.0",
+    "@goongmaps/goong-map-react": "^1.1.2",
+    "chart.js": "^4.5.1",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.9.4",
+    "sass": "^1.93.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
