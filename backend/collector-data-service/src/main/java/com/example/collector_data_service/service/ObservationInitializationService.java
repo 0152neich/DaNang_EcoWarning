@@ -1,5 +1,6 @@
 package com.example.collector_data_service.service;
 
+import com.example.collector_data_service.constant.LogMessage;
 import com.example.collector_data_service.domain.dto.ObservationSearchDTO;
 import com.example.collector_data_service.domain.entity.Asset;
 import com.example.collector_data_service.domain.entity.Metric;
@@ -36,6 +37,8 @@ public class ObservationInitializationService {
     private static final Logger log = LoggerFactory.getLogger(ObservationInitializationService.class);
 
     private static final String OBSERVATION_TOPIC = "observations_topic";
+    private static final String OBSERVATION_CREATED = "OBSERVATION_CREATED";
+
 
     private final AssetRepository assetRepository;
     private final MetricRepository metricRepository;
@@ -544,7 +547,7 @@ public class ObservationInitializationService {
 
             return Double.parseDouble(sanitizedString);
         } catch (NumberFormatException e) {
-            log.warn("Could not parse double value: '{}'", valueStr);
+            log.warn(LogMessage.LOAD_DOUBLE_FAIL, valueStr);
             return null;
         }
     }
@@ -552,7 +555,7 @@ public class ObservationInitializationService {
     private void sendObservationsToKafka(List<Observation> savedObservations) {
         for (Observation obs : savedObservations) {
             if (obs.getAsset() == null || obs.getMetric() == null) {
-                log.warn("Skipping Kafka event for Observation ID: {} due to missing Asset or Metric", obs.getId());
+                log.warn(LogMessage.MISSING_ASSET_OR_METRIC, obs.getId());
                 continue;
             }
 
@@ -579,7 +582,7 @@ public class ObservationInitializationService {
 
             kafkaProducerService.sendObservationEvent(
                     OBSERVATION_TOPIC,
-                    "OBSERVATION_CREATED",
+                    OBSERVATION_CREATED,
                     dto
             );
         }

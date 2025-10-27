@@ -1,5 +1,6 @@
 package com.example.collector_data_service.service;
 
+import com.example.collector_data_service.constant.LogMessage;
 import com.example.collector_data_service.domain.entity.Asset;
 import com.example.collector_data_service.helper.ParseResult;
 import com.example.collector_data_service.repository.AssetRepository;
@@ -32,6 +33,7 @@ public class AssetInitializationService {
     private static final Logger log = LoggerFactory.getLogger(AssetInitializationService.class);
 
     private static final String ASSET_TOPIC = "assets_topic";
+    private static final String ASSET_CREATED = "ASSET_CREATED";
 
     // Danh muc cac ho ao
     @Transactional
@@ -96,7 +98,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -168,7 +170,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -239,7 +241,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -307,7 +309,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -356,7 +358,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -405,7 +407,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -454,7 +456,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -508,7 +510,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -543,7 +545,7 @@ public class AssetInitializationService {
                 asset.setAssetType(ASSET_TYPE);
                 asset.setDistrict(record.get("Quận huyện"));
                 asset.setWard(record.get("Phường xã"));
-                asset.setAddress(rawName); // Tên chứa thông tin địa chỉ
+                asset.setAddress(rawName);
 
                 asset.setLatitude(parseSafeDouble(record.get("Vĩ độ")));
                 asset.setLongitude(parseSafeDouble(record.get("Kinh độ")));
@@ -557,7 +559,7 @@ public class AssetInitializationService {
 
                     kafkaProducerService.sendAssetEvent(
                             ASSET_TOPIC,
-                            "ASSET_CREATED",
+                            ASSET_CREATED,
                             savedAsset
                     );
                     recordsInserted++;
@@ -577,7 +579,7 @@ public class AssetInitializationService {
 
             return Double.parseDouble(sanitizedString);
         } catch (NumberFormatException e) {
-            log.warn("Could not parse double value: '{}'", valueStr);
+            log.warn(LogMessage.LOAD_DOUBLE_FAIL, valueStr);
             return null;
         }
     }
