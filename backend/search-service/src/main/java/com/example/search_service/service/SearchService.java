@@ -21,11 +21,8 @@ public class SearchService {
 
     public Page<Observation> searchObservations(ObservationSearchCriteriaDto criteria, Pageable pageable) {
 
-        // 1. Xây dựng bộ lọc (Specification)
         Specification<Observation> spec = observationSpecification.build(criteria);
 
-        // 2. Gọi Repository với bộ lọc VÀ phân trang
-        // Đây chính là hàm của JpaSpecificationExecutor
         Page<Observation> results = observationRepository.findAll(spec, pageable);
 
         return results;
