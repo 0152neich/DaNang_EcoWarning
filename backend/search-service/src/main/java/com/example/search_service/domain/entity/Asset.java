@@ -1,4 +1,4 @@
-package com.example.collector_data_service.domain.entity;
+package com.example.search_service.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

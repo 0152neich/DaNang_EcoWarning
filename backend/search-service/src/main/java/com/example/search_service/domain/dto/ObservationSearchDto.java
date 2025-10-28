@@ -1,4 +1,4 @@
-package com.example.collector_data_service.domain.dto;
+package com.example.search_service.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObservationSearchDTO {
+public class ObservationSearchDto {
 
     private String id;
     private Instant timestamp;
