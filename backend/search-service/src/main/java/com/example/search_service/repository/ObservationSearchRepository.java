@@ -1,4 +1,5 @@
 package com.example.search_service.repository;
+
 import com.example.search_service.domain.dto.MetricValueDTO;
 import com.example.search_service.domain.dto.response.MetricYearlySummaryDTO;
 import com.example.search_service.domain.dto.response.YearlySummaryDTO;
@@ -10,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public interface ObservationSearchRepository extends JpaRepository<Observation, Long>, JpaSpecificationExecutor<Observation> {

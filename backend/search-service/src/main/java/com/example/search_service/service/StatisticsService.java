@@ -11,7 +11,10 @@ import java.util.List;
 @Service
 public interface StatisticsService {
     List<AssetTypeCountDTO> getAssetCountsByType();
+
     List<YearlySummaryDTO> getDisasterDamageSummaryByYear();
+
     List<MetricValueDTO> getDisasterDamageDetailsByYear(Integer year);
+
     List<MetricYearlySummaryDTO> getAgricultureSummaryByUnit(String unit);
 }
