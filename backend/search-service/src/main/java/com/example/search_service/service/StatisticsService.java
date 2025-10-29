@@ -1,5 +1,6 @@
 package com.example.search_service.service;
 
+import com.example.search_service.domain.dto.AgricultureFilterOptionsDTO;
 import com.example.search_service.domain.dto.MetricValueDTO;
 import com.example.search_service.domain.dto.response.AssetTypeCountDTO;
 import com.example.search_service.domain.dto.response.MetricYearlySummaryDTO;
@@ -16,5 +17,7 @@ public interface StatisticsService {
 
     List<MetricValueDTO> getDisasterDamageDetailsByYear(Integer year);
 
-    List<MetricYearlySummaryDTO> getAgricultureSummaryByUnit(String unit);
+    List<MetricYearlySummaryDTO> searchAgricultureSummary(String unit, String crop, String aspect);
+
+    AgricultureFilterOptionsDTO getAgricultureFilterOptions();
 }
