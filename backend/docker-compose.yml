@@ -4,7 +4,6 @@ services:
   postgresql:
     image: postgres:16-alpine
     container_name: postgresql
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: khuong123
@@ -23,7 +22,6 @@ services:
   config-server:
     build: ./config-server
     container_name: config-server-2
-    restart: always
     ports:
       - "8888:8888"
     networks:
@@ -39,7 +37,6 @@ services:
   discovery-server:
     build: ./discovery-server
     container_name: discovery-server-2
-    restart: always
     ports:
       - "8761:8761"
     environment:
@@ -57,7 +54,6 @@ services:
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway-2
-    restart: always
     ports:
       - "8080:8080"
     depends_on:
@@ -81,7 +77,6 @@ services:
   collector-data-service:
     build: ./collector-data-service
     container_name: collector-data-service
-    restart: always
     depends_on:
       config-server:
         condition: service_healthy
@@ -101,7 +96,6 @@ services:
   search-service:
     build: ./search-service
     container_name: search-service
-    restart: always
     depends_on:
       config-server:
         condition: service_healthy
