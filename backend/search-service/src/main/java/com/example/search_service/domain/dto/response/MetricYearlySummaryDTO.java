@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Locale;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,19 @@ public class MetricYearlySummaryDTO {
 
     private Integer year;
 
-    private Double totalValue;
+    private String totalValue;
 
     private String unit;
+
+    public MetricYearlySummaryDTO(String metricName, Integer year, Double totalValue, String unit) {
+        this.metricName = metricName;
+        this.year = year;
+        this.unit = unit;
+
+        if (totalValue != null) {
+            this.totalValue = String.format(Locale.US, "%.2f", totalValue);
+        } else {
+            this.totalValue = null;
+        }
+    }
 }

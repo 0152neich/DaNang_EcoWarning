@@ -8,10 +8,14 @@ import java.time.LocalDateTime;
 @Data
 public class TimeSeriesDataPoint {
     private LocalDateTime timestamp;
-    private Double value;
+    private String value;
 
     public TimeSeriesDataPoint(Observation obs) {
         this.timestamp = obs.getRecordTime();
-        this.value = obs.getValue();
+        if (obs.getValue() != null) {
+            this.value = String.format(java.util.Locale.US, "%.6f", obs.getValue());
+        } else {
+            this.value = null;
+        }
     }
 }
