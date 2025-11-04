@@ -9,14 +9,23 @@ public class AssetMapDTO {
     private String id;
     private String name;
     private String assetType;
-    private Double latitude;
-    private Double longitude;
+    private String latitude;
+    private String longitude;
 
     public AssetMapDTO(Asset asset) {
         this.id = asset.getId().toString();
         this.name = asset.getName();
         this.assetType = asset.getAssetType();
-        this.latitude = asset.getLatitude();
-        this.longitude = asset.getLongitude();
+        if (asset.getLatitude() != null) {
+            this.latitude = String.format(java.util.Locale.US, "%.6f", asset.getLatitude());
+        } else {
+            this.latitude = null;
+        }
+
+        if (asset.getLongitude() != null) {
+            this.longitude = String.format(java.util.Locale.US, "%.6f", asset.getLongitude());
+        } else {
+            this.longitude = null;
+        }
     }
 }
