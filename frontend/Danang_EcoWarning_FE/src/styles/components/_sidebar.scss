@@ -13,8 +13,25 @@ $text-color: #ecf0f1;
   top: 0;
   left: 0;
   transition: width 0.3s ease;
-  overflow: hidden; // Ẩn văn bản khi thu nhỏ
+  overflow: hidden; 
   z-index: 1000;
+
+  .sidebar-logo {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    padding: 20px 0; 
+    margin-bottom: 10px; 
+
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    img {
+      width: 100px; 
+      height: auto;
+      max-width: 100%;  
+    }
+  }
 
   .sidebar-nav {
     list-style: none;

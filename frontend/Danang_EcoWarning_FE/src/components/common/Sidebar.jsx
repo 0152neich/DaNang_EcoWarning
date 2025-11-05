@@ -1,14 +1,16 @@
-
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "../../styles/components/_sidebar.scss"; 
+import "../../styles/components/_sidebar.scss";
 
 import { FaChartPie, FaMapMarkedAlt } from "react-icons/fa";
+import "../../../public/icons/Logo.png";
 
 const Sidebar = () => {
   return (
     <nav className="sidebar">
-      <div className="sidebar-logo"></div>
+      <div className="sidebar-logo">
+        <img src="../../../public/icons/Logo.png" alt="" />
+      </div>
       <ul className="sidebar-nav">
         <li className="sidebar-item">
           <NavLink to="/" className="sidebar-link">
