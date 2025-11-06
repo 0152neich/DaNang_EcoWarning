@@ -44,8 +44,8 @@ Dự án tập trung vào các chức năng chính sau:
 
 ## 🏗️ Tổng quan hệ thống
 
-* [Front-end](#-front-end)
-* [Back-end](#-back-end)
+* 🖥️ [Front-end](#-front-end)
+* 🗄️ [Back-end](#-back-end)
 
 ### 🖥️ Front-end
 
@@ -101,14 +101,14 @@ Trước hết, hãy clone dự án về máy tính của bạn:
   docker-compose up -d
 ```
 - Port Binding
-| Service                   | Port        |
-| :-------------------------| :-----------| 
-| `API Gateway`             | `8080:8080` | 
-| `Config Server`           | `8888:8888` | 
-| `Discovery Server`        | `8761:8761` | 
-| `Collector Data Service`  | `8081:8081` | 
-| `Search Service`          | `8082:8082` | 
-| `Citizen Report Service`  | `8083:8083` | 
+| Service | Port |
+| :-------------------------| :-----------|
+| `API Gateway` | `8080:8080` |
+| `Config Server` | `8888:8888` |
+| `Discovery Server` | `8761:8761` |
+| `Collector Data Service` | `8081:8081` |
+| `Search Service` | `8082:8082` |
+| `Citizen Report Service` | `8083:8083` |
 
 #### Chạy Web-App
 - Đầu tiên, cd vào thư mục /frontend/Danang_EcoWarning_FE: 
