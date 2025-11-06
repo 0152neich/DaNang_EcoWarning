@@ -10,7 +10,7 @@
 }
 
 .current-weather-card {
-  @include glassmorphism-card; 
+  @include glassmorphism-card;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -114,7 +114,6 @@
       gap: 5px;
       padding: 10px;
       border-radius: 12px;
-      // Nền mờ hơn cho các mục bên trong
       background-color: rgba(255, 255, 255, 0.4);
       min-width: 60px;
 

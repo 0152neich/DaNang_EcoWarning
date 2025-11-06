@@ -1,12 +1,22 @@
 // src/styles/pages/_dashboard-page.scss
 @import "../components/charts";
+@mixin glassmorphism-card {
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 20px 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
 
 .dashboard-page {
   .dashboard-title {
     font-size: 2rem;
     font-weight: 700;
-    color: $text-primary;
-    margin-bottom: 2rem;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.2);
   }
 
   .dashboard-grid {
@@ -54,6 +64,7 @@
   // -----------------------
 
   .chart-container {
+    // @include glassmorphism-card;
     min-height: 350px;
     display: flex;
     flex-direction: column;
