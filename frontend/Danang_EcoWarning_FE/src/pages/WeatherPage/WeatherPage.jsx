@@ -15,9 +15,9 @@ const DEFAULT_LON = 108.2208;
 
 const WeatherPage = () => {
   const [currentWeather, setCurrentWeather] = useState(null);
-  const [forecast, setForecast] = useState(null); 
+  const [forecast, setForecast] = useState(null);
   const [airPollution, setAirPollution] = useState(null);
-  const [selectedDay, setSelectedDay] = useState(null); 
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -72,9 +72,9 @@ const WeatherPage = () => {
   if (selectedDay) {
     const representativeData = selectedDay[0];
     displayData = {
-      ...representativeData, 
-      name: forecast.city.name, 
-      sys: currentWeather.sys, 
+      ...representativeData,
+      name: forecast.city.name,
+      sys: currentWeather.sys,
     };
   } else {
     displayData = currentWeather;
@@ -87,13 +87,13 @@ const WeatherPage = () => {
         <CurrentWeatherCard data={displayData} isForecastDay={!!selectedDay} />
         <ForecastPanel
           forecastList={forecast.list}
-          onDaySelect={setSelectedDay} 
+          onDaySelect={setSelectedDay}
           selectedDayDt={selectedDay ? selectedDay[0].dt : null}
         />
         <div className="weather-grid">
           <div className="main-charts">
             <WeatherCharts
-              key={selectedDay ? selectedDay[0].dt : "initial"} 
+              key={selectedDay ? selectedDay[0].dt : "initial"}
               data={chartData}
               title={chartTitle}
             />

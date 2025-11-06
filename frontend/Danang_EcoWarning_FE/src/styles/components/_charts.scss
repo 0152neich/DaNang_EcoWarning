@@ -1,8 +1,17 @@
 // src/styles/components/_charts.scss
 @import "../../styles/abstracts/variables";
+@mixin glassmorphism-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 20px 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
 
 .chart-container {
-  background-color: $bg-secondary; // White
+  @include glassmorphism-card;
+  // background-color: $bg-secondary; // White
   border: 1px solid $border-color;
   border-radius: 12px;
   padding: 20px;
