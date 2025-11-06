@@ -43,10 +43,6 @@ Dự án tập trung vào các chức năng chính sau:
 * 👥 Báo cáo cộng đồng: Cho phép người dùng gửi các báo cáo (report) về các sự cố thiên tai mà họ chứng kiến.
 
 ## 🏗️ Tổng quan hệ thống
-
-* 🖥️ [Front-end](#-front-end)
-* 🗄️ [Back-end](#-back-end)
-
 ### 🖥️ Front-end
 
 Dưới đây là tóm tắt các công nghệ, thư viện, và framework frontend chính đã được sử dụng để xây dựng dự án dashboard.
@@ -101,6 +97,7 @@ Trước hết, hãy clone dự án về máy tính của bạn:
   docker-compose up -d
 ```
 - Port Binding
+
 | Service | Port |
 | :-------------------------| :-----------|
 | `API Gateway` | `8080:8080` |
