@@ -1,11 +1,18 @@
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_REPORT_URL = import.meta.env.VITE_API_REPORT_URL;
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const OPENWEATHER_BASE_URL = import.meta.env.VITE_OPENWEATHER_BASE_URL;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+const apiClientv2 = axios.create({
+  baseURL: API_REPORT_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -52,11 +59,6 @@ export const getDamageDetail = (year) => {
     .then(handleResponse);
 };
 
-// export const getAgricultureSummary = (unit = "Tấn") => {
-//   return apiClient
-//     .get(`/static/agriculture/summary-by-year?unit=${unit}`)
-//     .then(handleResponse);
-// };
 export const getAgricultureSearch = (unit, crop, aspect) => {
   const params = {
     unit: unit,
@@ -161,4 +163,14 @@ export const getAirPollution = async (lat, lon) => {
     console.error("Lỗi khi lấy dữ liệu ô nhiễm:", error);
     throw error;
   }
+};
+/**
+ * 
+ * @param {object} reportData - Dữ liệu báo cáo theo format { request: {...}, image: "..." }
+ */
+export const sendDisasterReport = (reportData) => {
+  return apiClientv2
+    .post("/report/send-report", reportData)
+    .then(handleResponse)
+    .catch(handleError);
 };

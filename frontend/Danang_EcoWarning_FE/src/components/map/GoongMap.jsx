@@ -39,7 +39,7 @@ const GoongMap = ({ apiKey, assetType, onMarkerClick }) => {
       container: mapContainer.current,
       style: "https://tiles.goong.io/assets/goong_map_web.json",
       center: [108.2208, 16.0471],
-      zoom: 12,
+      zoom: 9,
     });
     map.current.addControl(new goongSdk.NavigationControl());
   }, []);
