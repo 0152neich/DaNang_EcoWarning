@@ -68,7 +68,9 @@ Back-end của hệ thống được thiết kế theo kiến trúc microservice
 - [Docker](https://www.docker.com/): Containerize các service.
 - [Docker Compose](https://docs.docker.com/compose): Quản lý các container.
 - [Swagger](https://springdoc.org): Tự động tạo tài liệu và giao diện thử nghiệm API.
-- [Apache Commons CSV](https://commons.apache.org/proper/commons-csv): Hỗ trợ đọc và phân tích cú pháp dữ liệu từ các file csv. 
+- [Apache Commons CSV](https://commons.apache.org/proper/commons-csv): Hỗ trợ đọc và phân tích cú pháp dữ liệu từ các file csv.
+
+<img loading="lazy" src="./docs/images/system_architecture.svg" alt="Architecture" width="100%" height=600>
 
 ## 🚀 Hướng dẫn cài đặt
 
@@ -88,7 +90,14 @@ Trước hết, hãy clone dự án về máy tính của bạn:
 ```
 
 #### Chạy Back-end hệ thống
-- Đầu tiên, cd vào thư mục backend:
+
+- Trước khi chạy dự án, bạn cần cung cấp các biến môi trường
+
+1.  Trong thư mục gốc `backend`, tìm file `.env.example`.
+2.  Tạo một bản sao của nó và đổi tên thành `.env`.
+3.  Mở file `.env` và điền các giá trị bí mật của bạn.
+
+Tiếp theo, Đầu tiên, cd vào thư mục backend:
 ```bash
   cd backend
 ```
@@ -133,6 +142,18 @@ Lúc này web-app sẽ được chạy ở địa chỉ http://localhost:5173. �
   npm run preview
 ```
 Lúc này web-app sẽ chạy ở địa chỉ http://localhost:4173/.
+
+#### CI/CD
+
+Project CI/CD sử dụng [GitHub Actions](https://github.com/features/actions) để tự động hóa quá trình kiểm thử (CI) và [Vercel](https://vercel.com/) để tự động hóa quá trình triển khai (CD) cho Frontend.
+
+Các workflows của GitHub Actions được lưu tại: `.github/workflows`, với các quy trình chính như sau:
+
+* **`backend-ci.yaml`**: Tự động build và chạy kiểm thử cho các microservices trong thư mục `backend` mỗi khi có Pull Request.
+* **`frontend-ci.yaml`**: Tự động chạy kiểm tra cho ứng dụng React trong thư mục `Frontend` mỗi khi có Pull Request.
+* **`build-docker-images.yaml`**: (Tùy chọn) Tự động build Docker images cho các service `backend` và đẩy (push) lên một registry (như [Docker Hub](https://hub.docker.com/) hoặc [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)) khi code được hợp nhất (merge) vào nhánh `main`.
+
+Việc triển khai (Deploy) Frontend được [Vercel](https://vercel.com/) xử lý tự động. Vercel được liên kết với repository [GitHub](https://github.com/) và sẽ tự động build (`npm run build`) và deploy phiên bản mới mỗi khi có code được đẩy lên nhánh chính (`main`).
 
 ## 🤝 Đóng góp cho dự án
 
