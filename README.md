@@ -28,6 +28,8 @@ Dự án được thực hiện bởi đội HaUI.HIT_NovaForge và được ope
 
 Thông tin về cuộc thi mã nguồn mở của Olympic Tin Học Sinh Viên năm 2025 tại [**đây**](https://vfossa.vn/thong-bao/de-thi-phan-mem-nguon-mo-olp-2025-749.html).
 
+Báo cáo chi tiết của đề tài tại [đây](https://docs.google.com/document/d/1pqNb2L2AgMyZDjhv5KqYJ7zyoboxEZebpqtc5bBJSGI/edit?usp=sharing).
+
 Mục tiêu chính của dự án:
 - Phân tích dữ liệu về thời tiết, khí hậu, nông nghiệp và các khu vực phòng chống thiên tai (thu thập từ các nguồn dữ liệu mở).
 - Đánh giá sự tác động của khí hậu đến sản xuất nông nghiệp và các rủi ro thiên tai tiềm ẩn.
@@ -70,7 +72,7 @@ Back-end của hệ thống được thiết kế theo kiến trúc microservice
 - [Swagger](https://springdoc.org): Tự động tạo tài liệu và giao diện thử nghiệm API.
 - [Apache Commons CSV](https://commons.apache.org/proper/commons-csv): Hỗ trợ đọc và phân tích cú pháp dữ liệu từ các file csv.
 
-<img loading="lazy" src="./docs/images/system_architecture.svg" alt="Architecture" width="100%" height=600>
+<img loading="lazy" src="./backend/docs/images/system_architecture.svg" alt="Architecture" width="100%" height=600>
 
 ## 🚀 Hướng dẫn cài đặt
 
