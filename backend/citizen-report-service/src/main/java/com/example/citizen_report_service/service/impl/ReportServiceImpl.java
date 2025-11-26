@@ -44,10 +44,7 @@ public class ReportServiceImpl implements ReportService {
 
         UploadImageResult imageResult = null;
 
-        if (imageFile == null)
-            throw new VsException(HttpStatus.BAD_REQUEST, ErrorMessage.ERR_UPLOAD_IMAGE_FAIL);
-
-        if (!imageFile.isEmpty()) {
+        if (!imageFile.isEmpty() && imageFile != null) {
             reportValidator.validateImage(imageFile);
 
             String reportTypeFolder = dto.getReportType();
