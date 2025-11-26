@@ -36,13 +36,15 @@ public class ReportValidator {
     }
 
     public void validateTime(OffsetDateTime eventStartTime, OffsetDateTime eventEndTime) {
-        if (eventStartTime == null || eventEndTime == null)
-            throw new VsException(ErrorMessage.ERR_REPORT_TIME_NOT_VALID);
+        if (eventStartTime == null)
+            throw new VsException(ErrorMessage.ERR_REPORT_START_TIME_NOT_FOUND);
 
-        if (eventEndTime.isBefore(eventStartTime) || eventEndTime.isEqual(eventStartTime))
-            throw new VsException(ErrorMessage.ERR_REPORT_TIME_NOT_VALID);
+        if (eventEndTime != null && eventStartTime != null) {
+            if (eventEndTime.isBefore(eventStartTime) || eventEndTime.isEqual(eventStartTime))
+                throw new VsException(ErrorMessage.ERR_REPORT_TIME_NOT_VALID);
+        }
 
-        if (eventStartTime.isAfter(OffsetDateTime.now().minusHours(168)))
+        if (eventStartTime.isBefore(OffsetDateTime.now().minusHours(168)))
             throw new VsException(ErrorMessage.ERR_REPORT_TIME_TOO_OLD);
     }
 

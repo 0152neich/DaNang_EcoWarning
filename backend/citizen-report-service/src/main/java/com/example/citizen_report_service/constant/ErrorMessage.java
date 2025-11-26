@@ -18,6 +18,7 @@ public class ErrorMessage {
     public static final String ERR_COORDINATES_NOT_VALID = "exception.coordinates.not.valid";
 
     public static final String ERR_REPORT_TIME_NOT_VALID = "exception.report.time.not.valid";
+    public static final String ERR_REPORT_START_TIME_NOT_FOUND = "exception.report.start.time.not.found";
     public static final String ERR_REPORT_TIME_TOO_OLD= "exception.report.time.too.old";
 
     public static final String ERR_REPORT_DETAILS_TOO_LONG = "exception.report.detail.too.long";

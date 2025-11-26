@@ -16,6 +16,8 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReportRequestDto {
+
+    @NotBlank
     private String reportType;
 
     private BigDecimal latitude;
@@ -23,6 +25,7 @@ public class ReportRequestDto {
     private BigDecimal longitude;
 
     @PastOrPresent(message = LogMessage.REPORT_TIME_NOT_VALID)
+    @NotBlank
     private OffsetDateTime eventStartTime;
 
     @PastOrPresent(message = LogMessage.REPORT_TIME_NOT_VALID)

@@ -44,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
 
         UploadImageResult imageResult = null;
 
-        if (!imageFile.isEmpty() && imageFile != null) {
+        if (imageFile != null) {
             reportValidator.validateImage(imageFile);
 
             String reportTypeFolder = dto.getReportType();
