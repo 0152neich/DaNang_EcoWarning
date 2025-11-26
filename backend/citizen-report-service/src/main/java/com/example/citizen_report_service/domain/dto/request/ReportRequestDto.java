@@ -25,7 +25,6 @@ public class ReportRequestDto {
     private BigDecimal longitude;
 
     @PastOrPresent(message = LogMessage.REPORT_TIME_NOT_VALID)
-    @NotBlank
     private OffsetDateTime eventStartTime;
 
     @PastOrPresent(message = LogMessage.REPORT_TIME_NOT_VALID)
