@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class ReportRequestDto {
 
-    @NotBlank
+    @NotBlank(message = LogMessage.REPORT_TYPE_EMPTY)
     private String reportType;
 
     private BigDecimal latitude;
