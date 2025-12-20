@@ -1,4 +1,4 @@
-package src.main.java.com.example.authservice.service.impl;
+package com.example.authservice.service.impl;
 
 import com.example.authservice.domain.dto.request.SignInRequest;
 import com.example.authservice.domain.dto.response.TokenResponse;

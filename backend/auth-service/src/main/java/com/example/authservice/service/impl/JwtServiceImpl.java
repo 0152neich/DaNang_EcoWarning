@@ -1,4 +1,4 @@
-package src.main.java.com.example.authservice.service.impl;
+package com.example.authservice.service.impl;
 
 import com.example.authservice.service.JwtService;
 import io.jsonwebtoken.Claims;

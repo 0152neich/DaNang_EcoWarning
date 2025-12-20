@@ -1,4 +1,4 @@
-package src.main.java.com.example.authservice.service;
+package com.example.authservice.service;
 
 import jakarta.mail.MessagingException;
 

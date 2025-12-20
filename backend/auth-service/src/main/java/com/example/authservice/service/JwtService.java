@@ -1,4 +1,4 @@
-package src.main.java.com.example.authservice.service;
+package com.example.authservice.service;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;

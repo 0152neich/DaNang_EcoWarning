@@ -1,4 +1,4 @@
-package src.main.java.com.example.authservice.service.impl;
+package com.example.authservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import com.example.authservice.service.MailService;

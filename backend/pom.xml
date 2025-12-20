@@ -16,6 +16,7 @@
         <module>collector-data-service</module>
         <module>search-service</module>
         <module>citizen-report-service</module>
+        <module>auth-service</module>
     </modules>
     <dependencies>
         <dependency>
