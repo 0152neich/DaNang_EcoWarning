@@ -104,6 +104,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_NAME: collector-data-service
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - app-net
 
@@ -125,6 +127,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_NAME: search-service
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - app-net
 
@@ -144,6 +148,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_NAME: citizen-report-service
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
     networks:
       - app-net

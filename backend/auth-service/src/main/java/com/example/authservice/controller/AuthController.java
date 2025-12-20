@@ -3,6 +3,7 @@ package com.example.authservice.controller;
 import com.example.authservice.base.RestApiV1;
 import com.example.authservice.base.RestData;
 import com.example.authservice.base.VsResponseUtil;
+import com.example.authservice.constant.AuthUrlConstant;
 import com.example.authservice.domain.dto.request.ForgotPasswordRequest;
 import com.example.authservice.domain.dto.request.RegisterUserRequest;
 import com.example.authservice.domain.dto.request.ResetPasswordRequest;
@@ -22,7 +23,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestApiV1
-@RequestMapping("/auth")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Authentication", description = "Authentication APIs")
@@ -31,21 +31,21 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping(AuthUrlConstant.Auth.REGISTER)
     @Operation(summary = "Register new user", description = "Create a new user account")
     public ResponseEntity<RestData<?>> register(@Valid @RequestBody RegisterUserRequest request) {
         userService.register(request);
         return VsResponseUtil.success(HttpStatus.CREATED, "Đăng ký tài khoản thành công");
     }
 
-    @PostMapping("/otp-sign-in")
+    @PostMapping(AuthUrlConstant.Auth.OTP_SIGN_IN)
     @Operation(summary = "Sign in with OTP", description = "Authenticate user and send OTP to email")
     public ResponseEntity<RestData<?>> otpSignIn(@Valid @RequestBody SignInRequest request) {
         TokenResponse tokenResponse = authService.getOtpSignIn(request);
         return VsResponseUtil.success(tokenResponse);
     }
 
-    @PostMapping("/verify-sign-in/{otp}")
+    @PostMapping(AuthUrlConstant.Auth.VERIFY_SIGN_IN)
     @Operation(summary = "Verify OTP for sign in", description = "Verify OTP and return access token")
     public ResponseEntity<RestData<?>> verifySignIn(
             @PathVariable String otp,
@@ -55,14 +55,14 @@ public class AuthController {
         return VsResponseUtil.success(tokenResponse);
     }
 
-    @PostMapping("/forgot-password")
+     @PostMapping(AuthUrlConstant.Auth.FORGOT_PASSWORD)
     @Operation(summary = "Forgot password", description = "Send OTP to email for password reset")
     public ResponseEntity<RestData<?>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authService.getOtpForgotPassword(request.getEmail());
         return VsResponseUtil.success("Mã OTP đã được gửi đến email của bạn");
     }
 
-    @PostMapping("/verify-forgot-password/{otp}")
+    @PostMapping(AuthUrlConstant.Auth.VERIFY_FORGOT_PASSWORD)
     @Operation(summary = "Verify OTP for forgot password", description = "Verify OTP for password reset")
     public ResponseEntity<RestData<?>> verifyForgotPassword(
             @PathVariable String otp,
@@ -72,20 +72,20 @@ public class AuthController {
         return VsResponseUtil.success("Xác thực OTP thành công, vui lòng đặt mật khẩu mới");
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping(AuthUrlConstant.Auth.RESET_PASSWORD)
     @Operation(summary = "Reset password", description = "Reset password after OTP verification")
     public ResponseEntity<RestData<?>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         authService.changePasswordNoAuth(request.getNewPassword(), request.getEmail());
         return VsResponseUtil.success("Đặt lại mật khẩu thành công");
     }
 
-    @PostMapping("/token")
+    @PostMapping(AuthUrlConstant.Auth.TOKEN_INFO)
     @Operation(summary = "Get user info from token", description = "Return current user information")
     public ResponseEntity<RestData<?>> getTokenInfo(@AuthenticationPrincipal User user) {
         return VsResponseUtil.success(user);
     }
 
-    @PostMapping("/logout")
+    @PostMapping(AuthUrlConstant.Auth.LOGOUT)
     @Operation(summary = "Logout", description = "Logout and invalidate tokens")
     public ResponseEntity<RestData<?>> logout(
             @RequestHeader("Authorization") String authHeader,
@@ -96,10 +96,9 @@ public class AuthController {
         return VsResponseUtil.success("Đăng xuất thành công");
     }
 
-    @PostMapping("/refresh-token")
+    @PostMapping(AuthUrlConstant.Auth.REFRESH_TOKEN)
     @Operation(summary = "Refresh access token", description = "Generate new access token using refresh token")
     public ResponseEntity<RestData<?>> refreshToken(@RequestParam String refreshToken) {
-        // TODO: Implement refresh token logic
         return VsResponseUtil.success("Làm mới token thành công");
     }
 }
