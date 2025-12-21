@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
     @Id
             @GeneratedValue(strategy = GenerationType.UUID)

@@ -55,7 +55,7 @@ public class AuthController {
         return VsResponseUtil.success(tokenResponse);
     }
 
-     @PostMapping(AuthUrlConstant.Auth.FORGOT_PASSWORD)
+    @PostMapping(AuthUrlConstant.Auth.FORGOT_PASSWORD)
     @Operation(summary = "Forgot password", description = "Send OTP to email for password reset")
     public ResponseEntity<RestData<?>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authService.getOtpForgotPassword(request.getEmail());
@@ -99,6 +99,7 @@ public class AuthController {
     @PostMapping(AuthUrlConstant.Auth.REFRESH_TOKEN)
     @Operation(summary = "Refresh access token", description = "Generate new access token using refresh token")
     public ResponseEntity<RestData<?>> refreshToken(@RequestParam String refreshToken) {
-        return VsResponseUtil.success("Làm mới token thành công");
+        TokenResponse tokenResponse = authService.refreshToken(refreshToken);
+        return VsResponseUtil.success(tokenResponse);
     }
 }

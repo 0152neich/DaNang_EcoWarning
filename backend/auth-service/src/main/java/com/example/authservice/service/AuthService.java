@@ -16,4 +16,6 @@ public interface AuthService {
     void changePasswordNoAuth(String newPassword, String email);
     
     void logout(String accessToken, String refreshToken);
+
+    TokenResponse refreshToken(String refreshToken);
 }

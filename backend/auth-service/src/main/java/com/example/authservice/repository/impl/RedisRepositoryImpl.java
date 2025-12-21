@@ -14,8 +14,8 @@ public class RedisRepositoryImpl implements RedisRepository {
     final RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public void setTimeToLive(String key, Long time) {
-        redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    public void setTimeToLive(String key, Long timeInMillis) {
+        redisTemplate.expire(key, timeInMillis, TimeUnit.MILLISECONDS);
     }
 
     @Override

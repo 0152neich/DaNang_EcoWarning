@@ -12,8 +12,8 @@ import com.example.authservice.service.JwtService;
 import com.example.authservice.service.MailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +24,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,11 +38,20 @@ public class AuthServiceImpl implements AuthService {
     private final RedisRepository redisRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${jwt.expiration.access:900000}")
+    private Long accessTokenExpiration;
+
+    @Value("${jwt.expiration.refresh:604800000}")
+    private Long refreshTokenExpiration;
+
+    @Value("${jwt.expiration.otp:120000}")
+    private Long otpExpiration;
+
     @Override
     public TokenResponse getOtpSignIn(SignInRequest signInRequest) {
         User user = userRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> new AppException(ErrorDetail.ERR_USER_UN_AUTHENTICATE));
-        
+
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     signInRequest.getEmail(),
@@ -60,25 +68,21 @@ public class AuthServiceImpl implements AuthService {
             log.error("Failed to send OTP to: {}", user.getEmail(), e);
             throw new AppException(ErrorDetail.ERR_SEND_MAIL_FAILED);
         }
-        
-        final long TIME_TOKEN = 1000L * 60 * 2; // 2 minutes
-        var tokenContent = jwtService.generateToken(user, TIME_TOKEN);
-        
+
+        var tokenContent = jwtService.generateToken(user, otpExpiration);
+
         return TokenResponse.builder()
                 .tokenContent(tokenContent)
-                .expToken(new Timestamp(System.currentTimeMillis() + TIME_TOKEN))
+                .expToken(new Timestamp(System.currentTimeMillis() + otpExpiration))
                 .build();
     }
 
     @Override
     public TokenResponse verifyOtpSignIn(String otp, User user) {
         verifyOtp(user.getEmail(), otp);
-        
-        final long TIME_TOKEN = 1000L * 60 * 60 * 24; // 24 hours
-        final long REFRESH_TOKEN_TIME = TIME_TOKEN * 7; // 7 days
-        
-        var tokenContent = jwtService.generateToken(user, TIME_TOKEN);
-        var refreshToken = jwtService.generateToken(user, REFRESH_TOKEN_TIME);
+
+        var tokenContent = jwtService.generateToken(user, accessTokenExpiration);
+        var refreshToken = jwtService.generateToken(user, refreshTokenExpiration);
 
         return TokenResponse.builder()
                 .tokenContent(tokenContent)
@@ -86,8 +90,8 @@ public class AuthServiceImpl implements AuthService {
                 .userId(user.getId())
                 .userName(user.getEmail())
                 .roleName(user.getRole())
-                .expToken(new Timestamp(System.currentTimeMillis() + TIME_TOKEN))
-                .expRefreshToken(new Timestamp(System.currentTimeMillis() + REFRESH_TOKEN_TIME))
+                .expToken(new Timestamp(System.currentTimeMillis() + accessTokenExpiration))
+                .expRefreshToken(new Timestamp(System.currentTimeMillis() + refreshTokenExpiration))
                 .build();
     }
 
@@ -151,7 +155,6 @@ public class AuthServiceImpl implements AuthService {
         redisRepository.set(accessToken, "logged_out");
         redisRepository.setTimeToLive(accessToken, accessTokenExpiration); // Already in milliseconds
 
-        // Blacklist refresh token if provided
         if (refreshToken != null && !refreshToken.isBlank()) {
             try {
                 Long refreshTokenExpiration = jwtService.getExpirationToken(refreshToken);
@@ -204,5 +207,44 @@ public class AuthServiceImpl implements AuthService {
         redisRepository.delete(email);
         
         log.info("OTP verified successfully for: {}", email);
+    }
+
+    @Override
+    public TokenResponse refreshToken(String refreshToken) {
+        if(refreshToken == null || refreshToken.isBlank()) {
+            throw new AppException(ErrorDetail.ERR_TOKEN_INVALID);
+        }
+
+        Object blacklisted = redisRepository.get(refreshToken);
+        if(blacklisted != null) {
+            throw new AppException(ErrorDetail.ERR_TOKEN_INVALID);
+        }
+
+        String username;
+        try {
+            username = jwtService.extractUsername(refreshToken);
+            if (jwtService.isTokenExpired(refreshToken)) {
+                throw new AppException(ErrorDetail.ERR_TOKEN_EXPIRED);
+            }
+        } catch (AppException e) {
+            log.error("Failed to validate refresh token", e);
+            throw new AppException(ErrorDetail.ERR_TOKEN_INVALID);
+        }
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new AppException(ErrorDetail.ERR_USER_NOT_EXISTED));
+
+        var newAccessToken = jwtService.generateToken(user, accessTokenExpiration);
+
+        log.info("Access token refreshed successfully for user: {}", username);
+
+        return TokenResponse.builder()
+                .tokenContent(newAccessToken)
+                .refreshToken(refreshToken)
+                .userId(user.getId())
+                .userName(user.getEmail())
+                .roleName(user.getRole())
+                .expToken(new Timestamp(System.currentTimeMillis() + accessTokenExpiration))
+                .build();
     }
 }
