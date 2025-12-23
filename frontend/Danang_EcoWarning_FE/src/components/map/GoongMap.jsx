@@ -46,7 +46,7 @@ const GoongMap = ({ apiKey, assetType, onMarkerClick, selectedAssetId }) => {
     map.current = new goongSdk.Map({
       container: mapContainer.current,
       style: "https://tiles.goong.io/assets/goong_map_web.json",
-      center: DEFAULT_CENTER, 
+      center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
     });
     map.current.addControl(new goongSdk.NavigationControl());
@@ -68,19 +68,13 @@ const GoongMap = ({ apiKey, assetType, onMarkerClick, selectedAssetId }) => {
 
     const fetchAndDrawAssets = async () => {
       try {
-
-
         const assets = await getAssetMap(assetType);
 
         if (isCancelled) {
-       
-
           return;
         }
 
         if (!assets || assets.length === 0) {
-         
-
           return;
         }
 
@@ -99,15 +93,13 @@ const GoongMap = ({ apiKey, assetType, onMarkerClick, selectedAssetId }) => {
 
           // const lng = parseFloat(newLngStr);
 
-  
-
           if (
             isNaN(latStr) ||
             isNaN(lngStr) ||
-            lat < -90 ||
-            lat > 90 ||
-            lng < -180 ||
-            lng > 180
+            latStr < -90 ||
+            latStr > 90 ||
+            lngStr < -180 ||
+            lngStr > 180
           ) {
             console.warn("Bỏ qua asset có tọa độ không hợp lệ:", asset.name, {
               latStr,
@@ -173,15 +165,12 @@ const GoongMap = ({ apiKey, assetType, onMarkerClick, selectedAssetId }) => {
         if (!isCancelled) {
           markersRef.current = newMarkersAndRoots;
         }
-      } catch (error) {
-       
-      }
+      } catch (error) {}
     };
 
     fetchAndDrawAssets();
 
     return () => {
-
       isCancelled = true;
     };
   }, [assetType]);
